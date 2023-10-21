@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    $dir = __DIR__ . "/route/v1/api";
+    $dir = __DIR__ . "/route/api/v1";
 
     foreach (scandir($dir) as $filename) {
 
