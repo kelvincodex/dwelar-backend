@@ -34,3 +34,4 @@
             server: ${{secrets.GIT_FTPS_SERVER}}
             username: ${{secrets.GIT_FTPS_USERNAME}}
             password: ${{secrets.GIT_FTPS_PASSWORD}}
+#            server-dir: ./
