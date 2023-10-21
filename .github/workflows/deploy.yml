@@ -36,3 +36,4 @@
             password: ${{secrets.GIT_FTPS_PASSWORD}}
             protocol: ${{secrets.GIT_FTPS_PROTOCOL}}
             server-dir: ./dashboard.dwelar.com/
+            local-dir: /dwelar-backend/
