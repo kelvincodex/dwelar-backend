@@ -34,5 +34,6 @@
             server: ${{secrets.GIT_FTPS_SERVER}}
             username: ${{secrets.GIT_FTPS_USERNAME}}
             password: ${{secrets.GIT_FTPS_PASSWORD}}
+            protocol: ${{secrets.GIT_FTPS_PROTOCOL}}
+            local-dir: ./*
             server-dir: ./dashboard.dwelar.com/
-            local-dir: ./
