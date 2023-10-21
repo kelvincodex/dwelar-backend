@@ -14,14 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::prefix('v1')->group(function () {
-    foreach (scandir(__DIR__ . "/v1/api") as $filename) {
+    $dir = __DIR__ . "/route/v1/api";
 
-        $path = __DIR__ .  "/v1/api/" . $filename;
+    foreach (scandir($dir) as $filename) {
+
+        $path = $dir . $filename;
         if (is_file($path)) {
             require $path;
         }
