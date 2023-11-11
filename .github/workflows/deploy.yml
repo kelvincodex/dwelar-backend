@@ -1,37 +1,53 @@
-  name: Deploying Backend
-  on:
-    push:
-      branches:
-        - master
-  jobs:
-    web-deploy:
-      name: Deploying
-      runs-on: ubuntu-latest
-      steps:
-        - name: Get latest code
-          uses: actions/checkout@v3
+name: Deploying Laravel App
+on:
+  push:
+    branches:
+      - hi
 
-        - name: Configure PHP 8.1
-          uses: shivammathur/setup-php@v2
-          with:
-            php-version: 8.1
+jobs:
+  laravel-deploy:
+    name: Deploying Laravel
+    runs-on: ubuntu-latest
 
-        - name: Copy .env
-          run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Update dependencies
-          run: composer update --ignore-platform-reqs
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
 
-        - name: Generate key
-          run: php artisan key:generate
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
 
-        - name: Directory Permissions
-          run: chmod -R 775 storage
+      - name: Copy .env
+        run: cp .env.example .env
 
-        - name: Sync files
-          uses: SamKirkland/FTP-Deploy-Action@4.0.0
-          with:
-            server: ${{secrets.GIT_FTPS_SERVER}}
-            username: ${{secrets.GIT_FTPS_USERNAME}}
-            password: ${{secrets.GIT_FTPS_PASSWORD}}
-#            server-dir: ./
+      - name: Configure .env
+        run: |
+          sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${{ secrets.DB_HOST }}/g" .env
+          sed -i "s/DB_DATABASE=mydatabase/DB_DATABASE=${{ secrets.DB_DATABASE }}/g" .env
+          sed -i "s/DB_USERNAME=mydatabaseuser/DB_USERNAME=${{ secrets.DB_USERNAME }}/g" .env
+          sed -i "s/DB_PASSWORD=mypassword/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/g" .env
+
+      - name: Artisan migrate
+        run: php artisan migrate --force
+
+      - name: Artisan optimize
+        run: php artisan optimize
+
+      - name: Clear cache
+        run: php artisan cache:clear
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Deploy to cPanel
+        uses: LittleEndianIO/cpanel-git-deploy@v3
+        with:
+#          host: ${{ secrets.CPANEL_HOST }}
+#          username: ${{ secrets.CPANEL_USERNAME }}
+#          password: ${{ secrets.CPANEL_PASSWORD }}
+#          destination: /home/your-cpanel-username/
+

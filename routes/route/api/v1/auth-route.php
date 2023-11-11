@@ -2,6 +2,8 @@
 
 use \Illuminate\Support\Facades\Route;
 
-Route::controller(\App\Http\Controllers\AuthController::class)->group(function (){
-    Route::post("/login", "login");
+Route::prefix('auth')->controller(\App\Http\Controllers\Api\V1\AuthController::class)->group(function (){
+    Route::post("/initiate/enrollment", "initiateEnrollment");
+    Route::post("/complete/enrollment", "completeEnrollment");
+    Route::get("/resend/otp", "resendOtp");
 });

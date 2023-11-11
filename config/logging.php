@@ -128,4 +128,13 @@ return [
         ],
     ],
 
+    'terminal' => [
+        'driver' => 'monolog',
+        'handler' => StreamHandler::class,
+        'formatter' => env('LOG_FORMATTER'),
+        'with' => [
+            'stream' => 'php://stdout',
+        ],
+    ],
+
 ];

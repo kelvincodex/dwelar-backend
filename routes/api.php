@@ -20,14 +20,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    $dir = __DIR__ . "/route/api/v1";
 
-    foreach (scandir($dir) as $filename) {
+    foreach (scandir(__DIR__ . "/route/api/v1") as $filename) {
 
-        $path = $dir . $filename;
+        $path = __DIR__ . "/route/api/v1/" . $filename;
+
         if (is_file($path)) {
             require $path;
         }
 
     }
 });
+
+foreach (scandir(__DIR__ . "/route/websocket/v1") as $filename) {
+
+    $path = __DIR__ . "/route/websocket/v1/" . $filename;
+
+    if (is_file($path)) {
+        require $path;
+    }
+
+}
